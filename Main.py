@@ -3,13 +3,13 @@ import RPi.GPIO as GPIO
 import bluetooth
 import datetime
 import time
+import shutil
 
 #Client Adresse ['B8:27:EB:98:42:D1']
 
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(3,GPIO.OUT) # input correct Pump Transistor command
-GPIO.setup(15,GPIO.IN,pull_up_down = GPIO.PUD_DOWN) #input correct soil sensor pin
-GPIO.setup(21,GPIO.OUT) 
+GPIO.setup(15,GPIO.IN,pull_up_down = GPIO.PUD_DOWN) #Soil sensor pin
+GPIO.setup(21,GPIO.OUT)  #Pump Controller Pin
 
 ### Function definition
 def ConnectionToBluetooth(Parameter_To_Check,_client_socket):
@@ -27,16 +27,32 @@ def Soil_Hydrometry(n,_client_socket):
     elif n ==1:
         _data =  ConnectionToBluetooth("SOIL1",_client_socket) #Check
         _Soil_Level = int(_data)
+    elif n ==2:
+        _data =  ConnectionToBluetooth("SOIL2",_client_socket) #Check
+        _Soil_Level = int(_data)
+    elif n ==3:
+        _data =  ConnectionToBluetooth("SOIL3",_client_socket) #Check
+        _Soil_Level = int(_data)
+    elif n ==4:
+        _data =  ConnectionToBluetooth("SOIL4",_client_socket) #Check
+        _Soil_Level = int(_data)
     return _Soil_Level
 
 def Activate_Pump(n,_client_socket):
     """ Activate the coresponding Pump"""
     if n == 0:
-        GPIO.output(3,1)# Input correct Pump transistor
-        time.sleep(15)
+        GPIO.output(21,1)
+        time.sleep(10)
+        GPIO.output(21,0)
     if n==1:
         Watering_Pump1 = ConnectionToBluetooth("PUMP1",_client_socket)
-    
+    if n==2:
+        Watering_Pump1 = ConnectionToBluetooth("PUMP2",_client_socket)
+    if n==3:
+        Watering_Pump1 = ConnectionToBluetooth("PUMP3",_client_socket)
+    if n==4:
+        Watering_Pump1 = ConnectionToBluetooth("PUMP4",_client_socket)
+        
 def Action_On_Plants_And_Updating_CSV(_File_Path,_Data_To_Write,Plant_Number):
     #Check Soil results and append them to results as well as create CSV file
     _Data_To_Write[Plant_Number].append(str(Soil_Hydrometry(Plant_Number,client_socket)))
@@ -50,6 +66,7 @@ def Action_On_Plants_And_Updating_CSV(_File_Path,_Data_To_Write,Plant_Number):
             Time_Difference = Today - Date_Of_Last_Watering
             break
 
+    Watering = "0" #Parameter to check if we have watered today
     if Time_Difference.days>2 or  Soil_Hydrometry(Plant_Number,client_socket) == 0:
         #Activate_Pump(Plant_Number,client_socket)
         Watering = '1'
@@ -74,21 +91,38 @@ def Action_On_Plants_And_Updating_CSV(_File_Path,_Data_To_Write,Plant_Number):
 ###Main loop
 Today = datetime.datetime.today()
 Time_Difference = Today
-Watering = "0" #Parameter to check if we have watered today
 
 #Initializing collected parameter
-Info_Plants = [["Oranger,",Today.strftime("%Y-%m-%d  %H:%M")],["Rosier,",Today.strftime("%Y-%m-%d  %H:%M")]]
+Info_Plants = [["Oranger,",Today.strftime("%Y-%m-%d  %H:%M")],["Fraisier,",Today.strftime("%Y-%m-%d  %H:%M")],["Rosier,",Today.strftime("%Y-%m-%d  %H:%M")],["Menthe,",Today.strftime("%Y-%m-%d  %H:%M")],["Piment,",Today.strftime("%Y-%m-%d  %H:%M")]]
 #Initializing bluetooth
 client_socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 client_socket.connect(("B8:27:EB:98:42:D1",4))
 
 #Oranger
 Action_On_Plants_And_Updating_CSV('Plants_information_Oranger.csv',Info_Plants,0)
+shutil.copy2('Plants_information_Oranger.csv','/var/plant_log/Plants_information_Oranger.csv')
 #END OF Oranger
 
 #Rosier
-Action_On_Plants_And_Updating_CSV('Plants_information_Rosier.csv',Info_Plants,1)
+Action_On_Plants_And_Updating_CSV('Plants_information_Fraisier.csv',Info_Plants,1)
+shutil.copy2('Plants_information_Fraisier.csv','/var/plant_log/Plants_information_Fraisier.csv')
+#END OF Fraisier
+
+#Rosier
+Action_On_Plants_And_Updating_CSV('Plants_information_Rosier.csv',Info_Plants,2)
+shutil.copy2('Plants_information_Rosier.csv','/var/plant_log/Plants_information_Rosier.csv')
 #END OF Rosier
+
+#Menthe
+Action_On_Plants_And_Updating_CSV('Plants_information_Menthe.csv',Info_Plants,3)
+shutil.copy2('Plants_information_Menthe.csv','/var/plant_log/Plants_information_Menthe.csv')
+#END OF Menthe
+
+#Piment
+Action_On_Plants_And_Updating_CSV('Plants_information_Piment.csv',Info_Plants,4)
+shutil.copy2('Plants_information_Piment.csv','/var/plant_log/Plants_information_Piment.csv')
+#END OF Piment
 
 print(Info_Plants[0])
 GPIO.cleanup()
+client_socket.send ("End_Data")
