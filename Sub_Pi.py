@@ -46,36 +46,38 @@ def Activate_pump(n):
 server_socket=bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 server_socket.bind(("",4))
 server_socket.listen(1)
-client_socket , adress = server_socket.accept()
-
+#Waiting for New connection loop
 
 while True:
-    data_to_receive = str(client_socket.recv(32))
-    data_to_send = "0"
+    client_socket , adress = server_socket.accept()
+
+    while True:
+        data_to_receive = str(client_socket.recv(32))
+        data_to_send = "0"
 #Depending on the contents of received data read sensor or activate pump
-    if "SOIL1" in data_to_receive:
-        data_to_send = str(Soil_Hydrometry(1))
-    elif "SOIL2" in data_to_receive:
-        data_to_send = str(Soil_Hydrometry(2))
-    elif "SOIL3" in data_to_receive:
-        data_to_send = str(Soil_Hydrometry(3))
-    elif "SOIL4" in data_to_receive:
-        data_to_send = str(Soil_Hydrometry(4))
-    elif "PUMP1" in data_to_receive:
-        Activte_pump(1)
-        data_to_send = "Watering_Strawberry"
-    elif "PUMP2" in data_to_receive:
-        Activte_pump(2)
-        data_to_send = "Watering_Rose"
-    elif "PUMP3" in data_to_receive:
-        Activte_pump(3)
-        data_to_send = "Watering_Piment"
-    elif "PUMP4" in data_to_receive:
-        Activte_pump(4)
-        data_to_send = "Watering_Mint"
-
-
-    client_socket.send(data_to_send)
+        if "SOIL1" in data_to_receive:
+            data_to_send = str(Soil_Hydrometry(1))
+        elif "SOIL2" in data_to_receive:
+            data_to_send = str(Soil_Hydrometry(2))
+        elif "SOIL3" in data_to_receive:
+            data_to_send = str(Soil_Hydrometry(3))
+        elif "SOIL4" in data_to_receive:
+            data_to_send = str(Soil_Hydrometry(4))
+        elif "PUMP1" in data_to_receive:
+            Activte_pump(1)
+            data_to_send = "Watering_Strawberry"
+        elif "PUMP2" in data_to_receive:
+            Activte_pump(2)
+            data_to_send = "Watering_Rose"
+        elif "PUMP3" in data_to_receive:
+            Activte_pump(3)
+            data_to_send = "Watering_Piment"
+        elif "PUMP4" in data_to_receive:
+            Activte_pump(4)
+            data_to_send = "Watering_Mint"
+        elif "End_Data" in data_to_receive:
+            break
+        client_socket.send(data_to_send)
 
 client_socket.close()
 server_socket.close()
