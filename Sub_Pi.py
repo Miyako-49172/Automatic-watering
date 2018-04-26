@@ -41,6 +41,7 @@ def Activate_pump(n):
     if n==4:
         GPIO.output(3,1) # Correct with the pin of the transistor
         time.sleep(10)
+    GPIO.output(3,0)
         
 #Main Loop for client
 server_socket=bluetooth.BluetoothSocket(bluetooth.RFCOMM)
