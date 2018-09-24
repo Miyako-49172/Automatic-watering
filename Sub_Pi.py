@@ -84,3 +84,64 @@ client_socket.close()
 server_socket.close()
 
 GPIO.cleanup()
+
+""" Test code
+GPIO.setup(2,GPIO.OUT)  #Motor II A1
+GPIO.setup(3,GPIO.OUT)  #Motor II A2
+GPIO.setup(21,GPIO.OUT)  #Motor II B1
+GPIO.setup(20,GPIO.OUT)  #Motor II B2
+
+GPIO.setup(4,GPIO.OUT)  #Motor I A1
+GPIO.setup(14,GPIO.OUT)  #Motor I A2
+GPIO.setup(15,GPIO.OUT)  #Motor I B1
+GPIO.setup(18,GPIO.OUT)  #Motor I B2
+
+GPIO.setup(26,GPIO.OUT)  #Motor control 12V
+GPIO.setup(19,GPIO.OUT)  #Pump Control
+
+###Main loop
+
+GPIO.output(26,1)
+GPIO.output(19,1)
+
+GPIO.output(2,0)
+GPIO.output(3,0)
+GPIO.output(20,0)
+GPIO.output(21,0)
+GPIO.output(4,0)
+GPIO.output(14,0)
+GPIO.output(15,0)
+GPIO.output(18,0)
+
+for i in range (1):
+    #GPIO.output(2,1)
+    #GPIO.output(3,0)
+    #GPIO.output(21,1)
+    #GPIO.output(20,0)
+    GPIO.output(4,1)
+    GPIO.output(14,0)
+    GPIO.output(15,0)
+    GPIO.output(18,1)
+    time.sleep(30)
+    #GPIO.output(2,0)
+    #GPIO.output(3,1)
+    #GPIO.output(21,0)
+    #GPIO.output(20,1)
+    GPIO.output(4,0)
+    GPIO.output(14,1)
+    GPIO.output(15,1)
+    GPIO.output(18,0)
+    time.sleep(30)
+    
+GPIO.output(4,0)
+GPIO.output(14,0)
+GPIO.output(15,0)
+GPIO.output(18,0)
+GPIO.output(19,0)
+
+GPIO.cleanup()
+        #GPIO.output(21,0)
+        #GPIO.output(20,1)
+    is closed when red si connected to B1
+
+"""
