@@ -93,7 +93,7 @@ Today = datetime.datetime.today()
 Time_Difference = Today
 
 #Initializing collected parameter
-Info_Plants = [["Oranger,",Today.strftime("%Y-%m-%d  %H:%M")],["Basil,",Today.strftime("%Y-%m-%d  %H:%M")],["Rosier,",Today.strftime("%Y-%m-%d  %H:%M")],["Menthe,",Today.strftime("%Y-%m-%d  %H:%M")],["Aubergine,",Today.strftime("%Y-%m-%d  %H:%M")]]
+Info_Plants = [["Oranger,",Today.strftime("%Y-%m-%d  %H:%M")],["Basil,",Today.strftime("%Y-%m-%d  %H:%M")],["Rosier,",Today.strftime("%Y-%m-%d  %H:%M")],["Aubergine,",Today.strftime("%Y-%m-%d  %H:%M")],["Menthe,",Today.strftime("%Y-%m-%d  %H:%M")]]
 #Initializing bluetooth
 client_socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 client_socket.connect(("B8:27:EB:98:42:D1",4))
@@ -114,15 +114,15 @@ Action_On_Plants_And_Updating_CSV('/home/pi/Program/Plants_information_Rosier.cs
 shutil.copy2('/home/pi/Program/Plants_information_Rosier.csv','/var/plant_log/Plants_information_Rosier.csv')
 #END OF Rosier
 time.sleep(15)
-#Menthe
-Action_On_Plants_And_Updating_CSV('/home/pi/Program/Plants_information_Menthe.csv',Info_Plants,3,client_socket)
-shutil.copy2('/home/pi/Program/Plants_information_Menthe.csv','/var/plant_log/Plants_information_Menthe.csv')
-#END OF Menthe
-time.sleep(15)
 #Eggplant
-Action_On_Plants_And_Updating_CSV('/home/pi/Program/Plants_information_Aubergine.csv',Info_Plants,4,client_socket)
+Action_On_Plants_And_Updating_CSV('/home/pi/Program/Plants_information_Aubergine.csv',Info_Plants,3,client_socket)
 shutil.copy2('/home/pi/Program/Plants_information_Aubergine.csv','/var/plant_log/Plants_information_Aubergine.csv')
 #END OF Eggplant
+time.sleep(15)
+#Menthe
+Action_On_Plants_And_Updating_CSV('/home/pi/Program/Plants_information_Menthe.csv',Info_Plants,4,client_socket)
+shutil.copy2('/home/pi/Program/Plants_information_Menthe.csv','/var/plant_log/Plants_information_Menthe.csv')
+#END OF Menthe
 time.sleep(15)
 #print(Info_Plants[0])
 GPIO.cleanup()
