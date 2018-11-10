@@ -3,12 +3,21 @@ import RPi.GPIO as GPIO
 #Server Adresse ['B8:27:EB:7F:76:B1']
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(3,GPIO.OUT) # Pump transistor
+GPIO.setup(5,GPIO.OUT) # Vavle transistor
+
 GPIO.setup(14,GPIO.IN,pull_up_down = GPIO.PUD_DOWN) #Mint
 GPIO.setup(15,GPIO.IN,pull_up_down = GPIO.PUD_DOWN) #Strtawberry
 GPIO.setup(17,GPIO.IN,pull_up_down = GPIO.PUD_DOWN) #Rose
 GPIO.setup(18,GPIO.IN,pull_up_down = GPIO.PUD_DOWN) #Piment
-
-
+           
+GPIO.setup(21,GPIO.OUT) # Basil (Red stripe)
+GPIO.setup(20,GPIO.OUT) # Basil (Black stripe)
+GPIO.setup(26,GPIO.OUT) # eggplant (Red stripe)
+GPIO.setup(19,GPIO.OUT) # eggplant (Black stripe)
+GPIO.setup(16,GPIO.OUT) # Rose (Red stripe)
+GPIO.setup(12,GPIO.OUT) # Rose (Black stripe)
+GPIO.setup(13,GPIO.OUT) # Mint (Red stripe)
+GPIO.setup(6,GPIO.OUT) # Mint (Black stripe)
 
 def Soil_Hydrometry(n):
     """ Check water level for connected plants"""
@@ -29,19 +38,59 @@ def Activate_pump(n):
     """Activate the corresponding pump with appropriate valve
        Not available yet so depending of the distance of the plants pump longer"""
     #Need additionnal code for valve control
-    if n==1:
-        GPIO.output(3,1) # Correct with the pin of the transistor
-        time.sleep(5)
-    if n==2:
-        GPIO.output(3,1) # Correct with the pin of the transistor
-        time.sleep(5)
-    if n==3:
-        GPIO.output(3,1) # Correct with the pin of the transistor
-        time.sleep(10)
-    if n==4:
-        GPIO.output(3,1) # Correct with the pin of the transistor
-        time.sleep(10)
+    GPIO.output(3,1)  # Activate Pump
+    GPIO.output(5,1)  # Activate Valve    
+    if n==1: #Basil
+        GPIO.output(21,1)
+        GPIO.output(20,0)
+        GPIO.output(26,0)
+        GPIO.output(19,1)
+        GPIO.output(16,0)
+        GPIO.output(12,1)
+        GPIO.output(13,0)
+        GPIO.output(6,1) 
+        time.sleep(30)
+    if n==2: #Rose
+        GPIO.output(21,0)
+        GPIO.output(20,1)
+        GPIO.output(26,0)
+        GPIO.output(19,1)
+        GPIO.output(16,1)
+        GPIO.output(12,0)
+        GPIO.output(13,0)
+        GPIO.output(6,1) 
+        time.sleep(30)
+    if n==3: #Eggplant
+        GPIO.output(21,0)
+        GPIO.output(20,1)
+        GPIO.output(26,1)
+        GPIO.output(19,0)
+        GPIO.output(16,0)
+        GPIO.output(12,1)
+        GPIO.output(13,0)
+        GPIO.output(6,1) 
+        time.sleep(30)
+    if n==4: #Mint
+        GPIO.output(21,0)
+        GPIO.output(20,1)
+        GPIO.output(26,0)
+        GPIO.output(19,1)
+        GPIO.output(16,0)
+        GPIO.output(12,1)
+        GPIO.output(13,1)
+        GPIO.output(6,0) 
+        time.sleep(30)
+    GPIO.output(21,0)
+    GPIO.output(20,1)
+    GPIO.output(26,0)
+    GPIO.output(19,1)
+    GPIO.output(16,0)
+    GPIO.output(12,1)
+    GPIO.output(13,0)
+    GPIO.output(6,1)    
     GPIO.output(3,0)
+    GPIO.output(5,0)
+
         
 #Main Loop for client
 server_socket=bluetooth.BluetoothSocket(bluetooth.RFCOMM)
@@ -85,63 +134,3 @@ server_socket.close()
 
 GPIO.cleanup()
 
-""" Test code
-GPIO.setup(2,GPIO.OUT)  #Motor II A1
-GPIO.setup(3,GPIO.OUT)  #Motor II A2
-GPIO.setup(21,GPIO.OUT)  #Motor II B1
-GPIO.setup(20,GPIO.OUT)  #Motor II B2
-
-GPIO.setup(4,GPIO.OUT)  #Motor I A1
-GPIO.setup(14,GPIO.OUT)  #Motor I A2
-GPIO.setup(15,GPIO.OUT)  #Motor I B1
-GPIO.setup(18,GPIO.OUT)  #Motor I B2
-
-GPIO.setup(26,GPIO.OUT)  #Motor control 12V
-GPIO.setup(19,GPIO.OUT)  #Pump Control
-
-###Main loop
-
-GPIO.output(26,1)
-GPIO.output(19,1)
-
-GPIO.output(2,0)
-GPIO.output(3,0)
-GPIO.output(20,0)
-GPIO.output(21,0)
-GPIO.output(4,0)
-GPIO.output(14,0)
-GPIO.output(15,0)
-GPIO.output(18,0)
-
-for i in range (1):
-    #GPIO.output(2,1)
-    #GPIO.output(3,0)
-    #GPIO.output(21,1)
-    #GPIO.output(20,0)
-    GPIO.output(4,1)
-    GPIO.output(14,0)
-    GPIO.output(15,0)
-    GPIO.output(18,1)
-    time.sleep(30)
-    #GPIO.output(2,0)
-    #GPIO.output(3,1)
-    #GPIO.output(21,0)
-    #GPIO.output(20,1)
-    GPIO.output(4,0)
-    GPIO.output(14,1)
-    GPIO.output(15,1)
-    GPIO.output(18,0)
-    time.sleep(30)
-    
-GPIO.output(4,0)
-GPIO.output(14,0)
-GPIO.output(15,0)
-GPIO.output(18,0)
-GPIO.output(19,0)
-
-GPIO.cleanup()
-        #GPIO.output(21,0)
-        #GPIO.output(20,1)
-    is closed when red si connected to B1
-
-"""
