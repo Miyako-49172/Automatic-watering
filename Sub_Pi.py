@@ -114,16 +114,16 @@ while True:
         elif "SOIL4" in data_to_receive:
             data_to_send = str(Soil_Hydrometry(4))
         elif "PUMP1" in data_to_receive:
-            Activte_pump(1)
+            Activate_pump(1)
             data_to_send = "Watering_Basil"
         elif "PUMP2" in data_to_receive:
-            Activte_pump(2)
+            Activate_pump(2)
             data_to_send = "Watering_Rose"
         elif "PUMP3" in data_to_receive:
-            Activte_pump(3)
+            Activate_pump(3)
             data_to_send = "Watering_Eggplant"
         elif "PUMP4" in data_to_receive:
-            Activte_pump(4)
+            Activate_pump(4)
             data_to_send = "Watering_Mint"
         elif "End_Data" in data_to_receive:
             break
