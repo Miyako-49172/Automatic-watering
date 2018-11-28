@@ -5,7 +5,7 @@ import datetime
 import time
 import shutil
 
-#Client Adresse ['B8:27:EB:98:42:D1']
+#Client Adresse ['B8:27:EB:57:8C:B5']
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(15,GPIO.IN,pull_up_down = GPIO.PUD_DOWN) #Soil sensor pin
@@ -96,7 +96,7 @@ Time_Difference = Today
 Info_Plants = [["Oranger,",Today.strftime("%Y-%m-%d  %H:%M")],["Basil,",Today.strftime("%Y-%m-%d  %H:%M")],["Rosier,",Today.strftime("%Y-%m-%d  %H:%M")],["Aubergine,",Today.strftime("%Y-%m-%d  %H:%M")],["Menthe,",Today.strftime("%Y-%m-%d  %H:%M")]]
 #Initializing bluetooth
 client_socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
-client_socket.connect(("B8:27:EB:98:42:D1",4))
+client_socket.connect(("B8:27:EB:57:8C:B5",4))
 
 #Oranger
 Action_On_Plants_And_Updating_CSV('/home/pi/Program/Plants_information_Oranger.csv',Info_Plants,0,client_socket)
